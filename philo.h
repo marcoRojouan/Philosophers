@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 13:47:36 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/03/30 15:24:31 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/03/31 16:59:21 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,25 @@ typedef struct s_table
 	long	number_of_meal;
 	long	start;
 	long	stop;
-
 	pthread_mutex_t	stop_mutex;
 	pthread_mutex_t	write_mutex;
-
 	pthread_mutex_t	*forks;
-
 	t_philo	*philos;
 }	t_table;
 
 int verif_args(char **av);
+int check_if_stop(t_philo *philo);
 int verif_data(t_table *table, int ac);
+int start_simulation(t_table *table);
+
+void print_msg(t_philo *philo, char *message);
+void smart_sleep(long time_in_ms);
+void eating_routine(t_philo *philo);
 
 long ft_atol(const char *nptr);
 long get_ms_time(void);
 
 t_table *table_init(int ac, char **av);
 
-int start_simulation(t_table *table);
 
 #endif

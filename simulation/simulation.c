@@ -6,29 +6,41 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:17:31 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/03/30 16:30:12 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/03/31 16:57:54 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-void smart_sleep(long time_in_ms)
+static void *check_death(void *arg)
 {
-    long start;
-
-    start = get_ms_time();
-    while (get_ms_time() - start < time_in_ms)
-        usleep(500);
-}
-
-void print_msg(t_philo *philo, char *message)
-{
-	long timestamp;
-
-	timestamp = get_ms_time() - philo->table->start;
-	pthread_mutex_lock(&philo->table->write_mutex);
-	printf("%ldms : philo %d %s\n", timestamp, philo->id, message);
-	pthread_mutex_unlock(&philo->table->write_mutex);
+	t_table	*table;
+	int		i;
+	
+	table = (t_table *)arg;
+	while (1)
+	{
+		i = 0;
+		while (i < table->number_of_philo)
+		{
+			pthread_mutex_lock(&table->philos[i].meal_mutex);
+			if (get_ms_time() - table->philos[i].last_meal > table->time_to_die)
+			{
+				pthread_mutex_lock(&table->stop_mutex);
+				table->stop = 1;
+				pthread_mutex_unlock(&table->stop_mutex);
+				pthread_mutex_lock(&table->write_mutex);
+				printf("%ldms : philo %d died\n",
+					get_ms_time() - table->start, table->philos[i].id);
+				pthread_mutex_unlock(&table->write_mutex);
+				pthread_mutex_unlock(&table->philos[i].meal_mutex);
+				return (NULL);
+			}
+			pthread_mutex_unlock(&table->philos[i].meal_mutex);
+			i++;	
+		}
+		usleep(500);
+	}
 }
 
 static void *philo_routine(void *arg)
@@ -36,17 +48,21 @@ static void *philo_routine(void *arg)
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(philo->forks[0]);
-	pthread_mutex_lock(philo->forks[1]);
-	print_msg(philo, "is eating");
-	smart_sleep(10);
-	pthread_mutex_unlock(philo->forks[0]);
-	pthread_mutex_unlock(philo->forks[1]);
+	while (1)
+	{	
+		if (check_if_stop(philo))
+			break;
+		eating_routine(philo);
+		print_msg(philo, "is sleeping");
+		smart_sleep(philo->table->time_to_sleep);
+		print_msg(philo, "is thinking");
+	}
 	return (NULL);
 }
 
 int start_simulation(t_table *table)
 {
+	pthread_t monitor;
 	int i;
 
 	table->start = get_ms_time();
@@ -58,11 +74,13 @@ int start_simulation(t_table *table)
 			&table->philos[i].thread, NULL, philo_routine, &table->philos[i]);
 		i++;
 	}
+	pthread_create(&monitor, NULL, check_death, table);
 	i = 0;
 	while (i < table->number_of_philo)
 	{
 		pthread_join(table->philos[i].thread, NULL);
 		i++;
 	}
+	pthread_join(monitor, NULL);
 	return (1);
 }
