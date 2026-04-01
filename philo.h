@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 13:47:36 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/03/31 16:59:21 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/01 16:41:56 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ typedef struct s_philo
 	int					id;
 	long				last_meal;
 	int					eaten_meals;
-	pthread_t			thread;
+	pthread_t		 	philo;
 	pthread_mutex_t		*forks[2];
-	pthread_mutex_t		meal_mutex;
+	pthread_mutex_t		last_mutex;
 	struct s_table		*table;
 }	t_philo;
 
@@ -52,7 +52,7 @@ int verif_data(t_table *table, int ac);
 int start_simulation(t_table *table);
 
 void print_msg(t_philo *philo, char *message);
-void smart_sleep(long time_in_ms);
+void smart_sleep(long time_in_ms, t_philo *philo);
 void eating_routine(t_philo *philo);
 
 long ft_atol(const char *nptr);

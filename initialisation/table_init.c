@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:16:34 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/03/30 15:19:08 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/01 16:42:31 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static t_philo *philos_init(t_table *table)
 		philos[i].last_meal = 0;
 		philos[i].forks[0] = &table->forks[i];
 		philos[i].forks[1] = &table->forks[(i + 1) % nb];
-		pthread_mutex_init(&philos[i].meal_mutex, NULL);
+		pthread_mutex_init(&philos[i].last_mutex, NULL);
 		i++;
 	}
 	return (philos);

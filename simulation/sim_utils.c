@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:51:52 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/03/31 17:06:56 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/01 17:05:18 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,17 @@ long get_ms_time(void)
 	return ((time_val.tv_sec * 1000) + (time_val.tv_usec / 1000));
 }
 
-void smart_sleep(long time_in_ms)
+void smart_sleep(long time_in_ms, t_philo *philo)
 {
     long start;
 
     start = get_ms_time();
     while (get_ms_time() - start < time_in_ms)
-        usleep(500);
+	{
+		if (check_if_stop(philo))
+			break;
+		usleep(500);
+	}
 }
 
 int check_if_stop(t_philo *philo)
@@ -68,10 +72,10 @@ void eating_routine(t_philo *philo)
 		print_msg(philo, "has taken a fork");
 	}
 		print_msg(philo, "is eating");
-		pthread_mutex_lock(&philo->meal_mutex);
+		pthread_mutex_lock(&philo->last_mutex);
 		philo->last_meal = get_ms_time();
-		pthread_mutex_unlock(&philo->meal_mutex);
-		smart_sleep(philo->table->time_to_eat);
+		pthread_mutex_unlock(&philo->last_mutex);
+		smart_sleep(philo->table->time_to_eat, philo);
 		pthread_mutex_unlock(philo->forks[0]);
 		pthread_mutex_unlock(philo->forks[1]);
 }
