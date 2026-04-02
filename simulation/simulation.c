@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:17:31 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/01 16:58:55 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/02 14:57:14 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,25 @@ static void *check_death(void *arg)
 {
 	t_table	*table;
 	int		i;
+	int		are_full;
 	
 	table = (t_table *)arg;
 	while (1)
 	{
+		are_full = 1;
 		i = 0;
 		while (i < table->number_of_philo)
 		{
 			pthread_mutex_lock(&table->philos[i].last_mutex);
-			if (get_ms_time() - table->philos[i].last_meal > table->time_to_die)
-			{
-				pthread_mutex_lock(&table->stop_mutex);
-				table->stop = 1;
-				pthread_mutex_unlock(&table->stop_mutex);
-				pthread_mutex_lock(&table->write_mutex);
-				printf("%ldms : philo %d died\n",
-					get_ms_time() - table->start, table->philos[i].id);
-				pthread_mutex_unlock(&table->write_mutex);
-				pthread_mutex_unlock(&table->philos[i].last_mutex);
+			if (check_if_dead(table, i))
 				return (NULL);
-			}
+			if (check_philo_is_full(table, i) == 0)
+				are_full = 0;
 			pthread_mutex_unlock(&table->philos[i].last_mutex);
 			i++;	
 		}
+		if (check_if_all_full(table, are_full))
+			return (NULL);
 		usleep(500);
 	}
 }
@@ -55,15 +51,18 @@ static void *philo_routine(void *arg)
 		if (philo->table->number_of_philo == 1)
 		{
 			pthread_mutex_lock(philo->forks[0]);
-			print_msg(philo, "has taken a fork");
+			print_msg(philo, "has twaken a fwork");
 			smart_sleep(philo->table->time_to_die, philo);
 			pthread_mutex_unlock(philo->forks[0]);
 			return (NULL);
 		}
+		if (philo->table->number_of_meal > 0
+    		&& philo->eaten_meals >= philo->table->number_of_meal)
+    		break;
 		eating_routine(philo);
-		print_msg(philo, "is sleeping");
+		print_msg(philo, "is sweeping");
 		smart_sleep(philo->table->time_to_sleep, philo);
-		print_msg(philo, "is thinking");
+		print_msg(philo, "is swinking");
 	}
 	return (NULL);
 }

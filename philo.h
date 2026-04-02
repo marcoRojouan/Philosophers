@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 13:47:36 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/01 16:41:56 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/02 13:38:39 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,14 @@ typedef struct s_table
 
 int verif_args(char **av);
 int check_if_stop(t_philo *philo);
+int check_if_dead(t_table *table, int i);
+int check_philo_is_full(t_table *table, int i);
+int check_if_all_full(t_table *table, int are_full);
 int verif_data(t_table *table, int ac);
 int start_simulation(t_table *table);
 
 void print_msg(t_philo *philo, char *message);
+void change_stop_values(t_table *table);
 void smart_sleep(long time_in_ms, t_philo *philo);
 void eating_routine(t_philo *philo);
 

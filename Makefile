@@ -25,6 +25,7 @@ SRCS			= philo.c \
 				  initialisation/table_init.c \
 				  parsing_utils/utils.c \
 				  parsing_utils/verif_args.c \
+				  simulation/sim_check.c \
 				  simulation/sim_utils.c \
 				  simulation/simulation.c
 

@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:51:52 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/01 17:05:18 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/02 14:58:46 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,11 @@ void smart_sleep(long time_in_ms, t_philo *philo)
 		usleep(500);
 	}
 }
-
-int check_if_stop(t_philo *philo)
+void change_stop_values(t_table *table)
 {
-	pthread_mutex_lock(&philo->table->stop_mutex);
-	if (philo->table->stop)
-	{
-		pthread_mutex_unlock(&philo->table->stop_mutex);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->table->stop_mutex);
-	return (0);
+	pthread_mutex_lock(&table->stop_mutex);
+	table->stop = 1;
+	pthread_mutex_unlock(&table->stop_mutex);
 }
 
 void print_msg(t_philo *philo, char *message)
@@ -63,19 +57,22 @@ void eating_routine(t_philo *philo)
 	{
 		pthread_mutex_lock(philo->forks[1]);
 		pthread_mutex_lock(philo->forks[0]);
-		print_msg(philo, "has taken a fork");
+		print_msg(philo, "has twaken a fwork");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->forks[0]);
 		pthread_mutex_lock(philo->forks[1]);
-		print_msg(philo, "has taken a fork");
+		print_msg(philo, "has twaken a fwork");
 	}
-		print_msg(philo, "is eating");
-		pthread_mutex_lock(&philo->last_mutex);
-		philo->last_meal = get_ms_time();
-		pthread_mutex_unlock(&philo->last_mutex);
-		smart_sleep(philo->table->time_to_eat, philo);
-		pthread_mutex_unlock(philo->forks[0]);
-		pthread_mutex_unlock(philo->forks[1]);
+	print_msg(philo, "is eating");
+	pthread_mutex_lock(&philo->last_mutex);
+	philo->last_meal = get_ms_time();
+	pthread_mutex_unlock(&philo->last_mutex);
+	smart_sleep(philo->table->time_to_eat, philo);
+	pthread_mutex_lock(&philo->last_mutex);
+	philo->eaten_meals++;
+	pthread_mutex_unlock(&philo->last_mutex);
+	pthread_mutex_unlock(philo->forks[0]);
+	pthread_mutex_unlock(philo->forks[1]);
 }
