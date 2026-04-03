@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:51:52 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/02 14:58:46 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/03 12:00:30 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,30 +49,4 @@ void print_msg(t_philo *philo, char *message)
 	pthread_mutex_lock(&philo->table->write_mutex);
 	printf("%ldms : philo %d %s\n", timestamp, philo->id, message);
 	pthread_mutex_unlock(&philo->table->write_mutex);
-}
-
-void eating_routine(t_philo *philo)
-{
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->forks[1]);
-		pthread_mutex_lock(philo->forks[0]);
-		print_msg(philo, "has twaken a fwork");
-	}
-	else
-	{
-		pthread_mutex_lock(philo->forks[0]);
-		pthread_mutex_lock(philo->forks[1]);
-		print_msg(philo, "has twaken a fwork");
-	}
-	print_msg(philo, "is eating");
-	pthread_mutex_lock(&philo->last_mutex);
-	philo->last_meal = get_ms_time();
-	pthread_mutex_unlock(&philo->last_mutex);
-	smart_sleep(philo->table->time_to_eat, philo);
-	pthread_mutex_lock(&philo->last_mutex);
-	philo->eaten_meals++;
-	pthread_mutex_unlock(&philo->last_mutex);
-	pthread_mutex_unlock(philo->forks[0]);
-	pthread_mutex_unlock(philo->forks[1]);
 }

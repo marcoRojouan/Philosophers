@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:17:31 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/02 14:57:14 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/03 13:23:11 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,19 @@ static void *philo_routine(void *arg)
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
+	if (philo->id % 2 == 0)
+		usleep(1000);
 	while (1)
 	{	
 		if (check_if_stop(philo))
 			break;
-		if (philo->table->number_of_philo == 1)
-		{
-			pthread_mutex_lock(philo->forks[0]);
-			print_msg(philo, "has twaken a fwork");
-			smart_sleep(philo->table->time_to_die, philo);
-			pthread_mutex_unlock(philo->forks[0]);
+		if (one_philo_routine(philo))
 			return (NULL);
-		}
+		pthread_mutex_lock(&philo->last_mutex);
 		if (philo->table->number_of_meal > 0
     		&& philo->eaten_meals >= philo->table->number_of_meal)
     		break;
+		pthread_mutex_unlock(&philo->last_mutex);
 		eating_routine(philo);
 		print_msg(philo, "is sweeping");
 		smart_sleep(philo->table->time_to_sleep, philo);

@@ -27,7 +27,8 @@ SRCS			= philo.c \
 				  parsing_utils/verif_args.c \
 				  simulation/sim_check.c \
 				  simulation/sim_utils.c \
-				  simulation/simulation.c
+				  simulation/simulation.c \
+				  simulation/routines_utils.c
 
 OBJS			= $(SRCS:.c=.o)
 
