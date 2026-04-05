@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loup <loup@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 13:47:36 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/03 12:03:10 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/05 16:28:57 by loup             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,18 @@ typedef struct s_table
 
 int verif_args(char **av);
 int check_if_stop(t_philo *philo);
-int check_if_dead(t_table *table, int i);
 int check_philo_is_full(t_table *table, int i);
-int check_if_all_full(t_table *table, int are_full);
+int check_philo(t_table *table, int i, int *all_full);
 int verif_data(t_table *table, int ac);
 int start_simulation(t_table *table);
 int one_philo_routine(t_philo *philo);
 
+void eating_routine(t_philo *philo);
 void print_msg(t_philo *philo, char *message);
 void change_stop_values(t_table *table);
 void smart_sleep(long time_in_ms, t_philo *philo);
-void eating_routine(t_philo *philo);
+void check_all_full(t_table *table, int all_full);
+void thinking_routine(t_philo *philo);
 
 long ft_atol(const char *nptr);
 long get_ms_time(void);

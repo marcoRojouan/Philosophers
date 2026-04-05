@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routines_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loup <loup@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 11:58:42 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/03 13:30:44 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/05 16:33:40 by loup             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,30 +25,55 @@ int one_philo_routine(t_philo *philo)
 	return (0);
 }
 
-void eating_routine(t_philo *philo)
-{		
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->forks[1]);
-		print_msg(philo, "has twaken a fwork");
-		pthread_mutex_lock(philo->forks[0]);
-		print_msg(philo, "has twaken a fwork");
-	}
-	else
-	{
-		pthread_mutex_lock(philo->forks[0]);
-		print_msg(philo, "has twaken a fwork");
-		pthread_mutex_lock(philo->forks[1]);
-		print_msg(philo, "has twaken a fwork");
-	}
-	print_msg(philo, "is eating");
-	pthread_mutex_lock(&philo->last_mutex);
-	philo->last_meal = get_ms_time();
-	pthread_mutex_unlock(&philo->last_mutex);
-	smart_sleep(philo->table->time_to_eat, philo);
-	pthread_mutex_lock(&philo->last_mutex);
-	philo->eaten_meals++;
-	pthread_mutex_unlock(&philo->last_mutex);
-	pthread_mutex_unlock(philo->forks[0]);
-	pthread_mutex_unlock(philo->forks[1]);
+void thinking_routine(t_philo *philo)
+{
+	long    think_time;
+
+    print_msg(philo, "is thinking");
+    think_time = philo->table->time_to_die
+        - philo->table->time_to_eat
+        - philo->table->time_to_sleep;
+    think_time /= 2;
+    if (think_time < 0)
+        think_time = 0;
+    if (think_time > 600)
+        think_time = 600;
+    if (think_time > 0)
+        smart_sleep(think_time, philo);
 }
+
+static void    after_eating(t_philo *philo,
+                   pthread_mutex_t *first, pthread_mutex_t *second)
+{
+	pthread_mutex_lock(&philo->last_mutex);
+    philo->last_meal = get_ms_time();
+    philo->eaten_meals++;
+    pthread_mutex_unlock(&philo->last_mutex);
+    print_msg(philo, "is eating");
+    smart_sleep(philo->table->time_to_eat, philo);
+    pthread_mutex_unlock(first);
+    pthread_mutex_unlock(second);
+}
+
+void eating_routine(t_philo *philo)
+{	
+    pthread_mutex_t *first_fork;
+    pthread_mutex_t *second_fork;
+
+    if (philo->forks[0] < philo->forks[1])
+    {
+		first_fork = philo->forks[0]; 
+		second_fork = philo->forks[1]; 
+	}
+    else
+    { 
+		first_fork = philo->forks[1];
+		second_fork = philo->forks[0];
+	 }
+    pthread_mutex_lock(first_fork);
+    print_msg(philo, "has taken a fork");
+    pthread_mutex_lock(second_fork);
+    print_msg(philo, "has taken a fork");
+	after_eating(philo, first_fork, second_fork);
+}
+

@@ -14,7 +14,7 @@
 
 NAME			= philo
 CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror -pthread -g
+CFLAGS			= -Wall -Wextra -Werror -pthread -I. -g
 CFLAGS_DEBUG	= $(CFLAGS) -g3 -O0
 RM				= rm -f
 
