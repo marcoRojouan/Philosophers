@@ -12,7 +12,7 @@
 
 # ============================= VARIABLES ============================== #
 
-NAME			= philo
+NAME			= philosophers
 CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror -pthread -I. -g
 CFLAGS_DEBUG	= $(CFLAGS) -g3 -O0
@@ -20,15 +20,15 @@ RM				= rm -f
 
 # ============================= SOURCES =============================== #
 
-SRCS			= philo.c \
-				  errors/free_struct.c \
+SRCS			= philosophers.c \
 				  initialisation/table_init.c \
 				  parsing_utils/utils.c \
 				  parsing_utils/verif_args.c \
 				  simulation/sim_check.c \
 				  simulation/sim_utils.c \
 				  simulation/simulation.c \
-				  simulation/routines_utils.c
+				  simulation/routines_utils.c \
+				  error_clean/clean_up.c
 
 OBJS			= $(SRCS:.c=.o)
 

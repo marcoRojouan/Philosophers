@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loup <loup@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 16:44:54 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/03/24 10:24:21 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/05 17:56:53 by loup             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo.h>
+#include <philosophers.h>
 
 long	ft_atol(const char *nptr)
 {
-	int	i;
-	int	multi;
+	int		i;
+	int		multi;
 	long	nbr;
 
 	i = 0;
