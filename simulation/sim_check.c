@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 13:35:30 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/06 13:22:43 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/06 13:44:45 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_philo(t_table *table, int i, int *all_full)
 	{
 		change_stop_values(table);
 		pthread_mutex_lock(&table->write_mutex);
-		printf("%ldms : philo %d is dead\n",
+		printf("%ld %d died\n",
 			get_ms_time() - table->start,
 			table->philos[i].id);
 		pthread_mutex_unlock(&table->write_mutex);
