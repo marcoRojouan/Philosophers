@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loup <loup@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 13:47:36 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/05 17:59:27 by loup             ###   ########.fr       */
+/*   Updated: 2026/04/06 13:23:23 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct s_table
 
 int		verif_args(char **av);
 int		check_if_stop(t_philo *philo);
-int		check_philo_is_full(t_table *table, int i);
 int		check_philo(t_table *table, int i, int *all_full);
 int		verif_data(t_table *table, int ac);
 int		start_simulation(t_table *table);

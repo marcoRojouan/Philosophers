@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loup <loup@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 13:35:30 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/05 17:57:02 by loup             ###   ########.fr       */
+/*   Updated: 2026/04/06 13:22:43 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,4 @@ void	check_all_full(t_table *table, int all_full)
 		printf("All philosophers have eaten enough\n");
 		pthread_mutex_unlock(&table->write_mutex);
 	}
-}
-
-int	check_philo_is_full(t_table *table, int i)
-{
-	if (table->number_of_meal > 0
-		&& table->philos[i].eaten_meals < table->number_of_meal)
-		return (0);
-	return (1);
 }
