@@ -6,7 +6,7 @@
 /*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:51:52 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/06 13:42:56 by mrojouan         ###   ########.fr       */
+/*   Updated: 2026/04/07 10:48:21 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,9 @@ void	print_msg(t_philo *philo, char *message)
 {
 	long	timestamp;
 
-	if (check_if_stop(philo))
-		return ;
 	timestamp = get_ms_time() - philo->table->start;
 	pthread_mutex_lock(&philo->table->write_mutex);
-	printf("%ld %d %s\n", timestamp, philo->id, message);
+	if (!check_if_stop(philo))
+		printf("%ld %d %s\n", timestamp, philo->id, message);
 	pthread_mutex_unlock(&philo->table->write_mutex);
 }
