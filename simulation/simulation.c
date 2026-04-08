@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loup <loup@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 14:17:31 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/07 18:01:52 by loup             ###   ########.fr       */
+/*   Updated: 2026/04/08 10:41:10 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int	start_simulation(t_table *table)
 	{
 		table->philos[i].last_meal = table->start;
 		if (pthread_create(
-			&table->philos[i].philo, NULL, philo_routine, &table->philos[i]))
+				&table->philos[i].philo,
+				NULL, philo_routine, &table->philos[i]))
 			return (0);
 		i++;
 	}
