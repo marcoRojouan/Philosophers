@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routines_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loup <loup@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mrojouan <mrojouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 11:58:42 by mrojouan          #+#    #+#             */
-/*   Updated: 2026/04/05 17:57:00 by loup             ###   ########.fr       */
+/*   Updated: 2026/06/17 11:00:12 by mrojouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	one_philo_routine(t_philo *philo)
 	if (philo->table->number_of_philo == 1)
 	{
 		pthread_mutex_lock(philo->forks[0]);
-		print_msg(philo, "has twaken a fwork");
+		print_msg(philo, "has taken a fork");
 		smart_sleep(philo->table->time_to_die, philo);
 		pthread_mutex_unlock(philo->forks[0]);
 		return (1);
